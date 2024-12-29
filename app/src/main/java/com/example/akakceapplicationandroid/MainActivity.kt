@@ -3,6 +3,8 @@ package com.example.akakceapplicationandroid
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listAdapter: ListProductAdapter
     private val repository = ProductRepository()
 
+    private lateinit var dotIndicator: LinearLayout
+    private lateinit var dots: Array<ImageView>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,6 +41,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        dotIndicator = findViewById(R.id.dotIndicator)
 
         // RecyclerView setup
         cardRecyclerView = findViewById(R.id.card_recycler_view)
@@ -50,6 +57,21 @@ class MainActivity : AppCompatActivity() {
         listRecyclerView.layoutManager = GridLayoutManager(this, 2)
         listAdapter = ListProductAdapter(emptyList())
         listRecyclerView.adapter = listAdapter
+
+
+        cardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val activePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+                    if (activePosition != RecyclerView.NO_POSITION) {
+                        updateDotIndicators(activePosition) // Dotları güncelle
+                    }
+                }
+            }
+        })
 
         // Fetch products
         fetchProducts()
@@ -88,11 +110,42 @@ class MainActivity : AppCompatActivity() {
                         }
                         startActivity(intent)
                     }
+
+                    refreshDotIndicator(products.size)
                 }
             } else {
                 println("Yatay ürünler yüklenemedi!") // Hata mesajı
             }
         }, 5)
+    }
+
+    private fun refreshDotIndicator(size: Int) {
+        dots = Array(size) { ImageView(this) }
+        dotIndicator.removeAllViews()
+
+        for (i in dots.indices) {
+            dots[i] = ImageView(this).apply {
+                setImageResource(R.drawable.dot_inactive) // Varsayılan pasif nokta
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                params.setMargins(8, 0, 8, 0) // Noktalar arası boşluk
+                layoutParams = params
+            }
+            dotIndicator.addView(dots[i])
+        }
+
+        // İlk noktayı aktif yap
+        if (dots.isNotEmpty()) {
+            updateDotIndicators(0)
+        }
+    }
+
+    private fun updateDotIndicators(activePosition: Int) {
+        for (i in dots.indices) {
+            dots[i].setImageResource(if (i == activePosition) R.drawable.dot_active else R.drawable.dot_inactive)
+        }
     }
 
     private fun enableEdgeToEdge() {
