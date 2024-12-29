@@ -1,5 +1,6 @@
 package com.example.akakceapplicationandroid
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +10,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.example.akakceapplicationandroid.data.model.Product
 import com.example.akakceapplicationandroid.data.repository.ProductRepository
 import com.example.akakceapplicationandroid.ui.adapter.CardProductAdapter
 import com.example.akakceapplicationandroid.ui.adapter.ListProductAdapter
+import com.example.akakceapplicationandroid.ui.detail.DetailedProductActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,17 +40,16 @@ class MainActivity : AppCompatActivity() {
         // RecyclerView setup
         cardRecyclerView = findViewById(R.id.card_recycler_view)
         cardRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        cardAdapter = CardProductAdapter(emptyList()) // Boş bir listeyle adapter oluştur
+        cardAdapter = CardProductAdapter(emptyList())
         cardRecyclerView.adapter = cardAdapter
 
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(cardRecyclerView)
 
         listRecyclerView = findViewById(R.id.list_recycler_view)
-        listRecyclerView.layoutManager = GridLayoutManager(this, 2) // Her satırda 2 öğe
+        listRecyclerView.layoutManager = GridLayoutManager(this, 2)
         listAdapter = ListProductAdapter(emptyList())
         listRecyclerView.adapter = listAdapter
-
 
         // Fetch products
         fetchProducts()
@@ -59,27 +61,38 @@ class MainActivity : AppCompatActivity() {
                 runOnUiThread {
                     listAdapter = ListProductAdapter(products)
                     listRecyclerView.adapter = listAdapter
+
+                    // Liste ürünlerine tıklama dinleyicisi
+                    listAdapter.setOnItemClickListener { product ->
+                        val intent = Intent(this, DetailedProductActivity::class.java).apply {
+                            putExtra("PRODUCT", product)
+                        }
+                        startActivity(intent)
+                    }
                 }
             } else {
                 println("Ürünler yüklenemedi!")
             }
         }
 
-        repository.getHorizontalProducts(
-            { products ->
-                if (products != null) {
-                    runOnUiThread {
-                        cardAdapter = CardProductAdapter(products) // Yeni ürünlerle adapter'ı güncelle
-                        cardRecyclerView.adapter = cardAdapter // RecyclerView'e bağla
+        repository.getHorizontalProducts({ products ->
+            if (products != null) {
+                runOnUiThread {
+                    cardAdapter = CardProductAdapter(products)
+                    cardRecyclerView.adapter = cardAdapter
+
+                    // Yatay ürünlere tıklama dinleyicisi
+                    cardAdapter.setOnItemClickListener { product ->
+                        val intent = Intent(this, DetailedProductActivity::class.java).apply {
+                            putExtra("PRODUCT", product)
+                        }
+                        startActivity(intent)
                     }
-                } else {
-                    println("Ürünler yüklenemedi!")
                 }
-            },
-            5
-        )
-
-
+            } else {
+                println("Yatay ürünler yüklenemedi!") // Hata mesajı
+            }
+        }, 5)
     }
 
     private fun enableEdgeToEdge() {

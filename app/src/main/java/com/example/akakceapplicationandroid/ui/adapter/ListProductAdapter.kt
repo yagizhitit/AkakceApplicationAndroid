@@ -1,5 +1,6 @@
 package com.example.akakceapplicationandroid.ui.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.akakceapplicationandroid.R
 import com.example.akakceapplicationandroid.data.model.Product
+import com.example.akakceapplicationandroid.ui.detail.DetailedProductActivity
 
 class ListProductAdapter(private val products: List<Product>) :
     RecyclerView.Adapter<ListProductAdapter.ProductViewHolder>() {
+
+    private var onItemClickListener: ((Product) -> Unit)? = null
 
     // ViewHolder sınıfı
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,9 +44,22 @@ class ListProductAdapter(private val products: List<Product>) :
         // Glide kullanarak görsel yükleme
         Glide.with(holder.productImage.context)
             .load(product.image)
-            .placeholder(R.drawable.akakcelogo) // Yer tutucu bir görsel eklenebilir
+            .placeholder(R.drawable.akakcelogo)
             .into(holder.productImage)
+
+        // Ürün tıklama özelliği ekleme
+        holder.itemView.setOnClickListener { // Tıklama dinleyicisi
+            val context = holder.itemView.context
+            val intent = Intent(context, DetailedProductActivity::class.java).apply {
+                putExtra("PRODUCT", product) // Tıklanan ürünü gönderiyoruz
+            }
+            context.startActivity(intent) // Detay sayfasını başlat
+        }
     }
 
     override fun getItemCount(): Int = products.size
+
+    fun setOnItemClickListener(listener: (Product) -> Unit) {
+        onItemClickListener = listener
+    }
 }

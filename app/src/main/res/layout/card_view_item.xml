@@ -25,10 +25,12 @@
         android:id="@+id/product_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:ellipsize="end"
+        android:textColor="@color/blue"
         android:maxLines="2"
         android:text="Product Name"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/product_image"
@@ -40,12 +42,26 @@
         android:id="@+id/product_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         android:text="199.99 TL"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/product_image"
         app:layout_constraintTop_toBottomOf="@id/product_name" />
+
+    <!-- Rating Count -->
+    <TextView
+        android:id="@+id/rating_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="(320 reviews)"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/product_price"
+        app:layout_constraintTop_toBottomOf="@id/product_price" />
+
 
     <!-- Rating Layout -->
     <LinearLayout
@@ -55,9 +71,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintStart_toEndOf="@id/product_image"
-        app:layout_constraintTop_toBottomOf="@id/product_price">
+        app:layout_constraintStart_toStartOf="@id/rating_count"
+        app:layout_constraintTop_toBottomOf="@id/rating_count">
 
         <!-- Rating Stars -->
         <TextView
@@ -75,16 +90,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Rating Count -->
-    <TextView
-        android:id="@+id/rating_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="(320 reviews)"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/rating_layout"
-        app:layout_constraintTop_toBottomOf="@id/rating_layout" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
