@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.akakceapplicationandroid.data.repository.ProductRepository
 import com.example.akakceapplicationandroid.ui.adapter.CardProductAdapter
 import com.example.akakceapplicationandroid.ui.adapter.ListProductAdapter
@@ -39,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         cardAdapter = CardProductAdapter(emptyList()) // Boş bir listeyle adapter oluştur
         cardRecyclerView.adapter = cardAdapter
 
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(cardRecyclerView)
+
         listRecyclerView = findViewById(R.id.list_recycler_view)
         listRecyclerView.layoutManager = GridLayoutManager(this, 2) // Her satırda 2 öğe
         listAdapter = ListProductAdapter(emptyList())
@@ -53,9 +57,6 @@ class MainActivity : AppCompatActivity() {
         repository.getProducts { products ->
             if (products != null) {
                 runOnUiThread {
-                    cardAdapter = CardProductAdapter(products) // Yeni ürünlerle adapter'ı güncelle
-                    cardRecyclerView.adapter = cardAdapter // RecyclerView'e bağla
-
                     listAdapter = ListProductAdapter(products)
                     listRecyclerView.adapter = listAdapter
                 }
@@ -63,6 +64,22 @@ class MainActivity : AppCompatActivity() {
                 println("Ürünler yüklenemedi!")
             }
         }
+
+        repository.getHorizontalProducts(
+            { products ->
+                if (products != null) {
+                    runOnUiThread {
+                        cardAdapter = CardProductAdapter(products) // Yeni ürünlerle adapter'ı güncelle
+                        cardRecyclerView.adapter = cardAdapter // RecyclerView'e bağla
+                    }
+                } else {
+                    println("Ürünler yüklenemedi!")
+                }
+            },
+            5
+        )
+
+
     }
 
     private fun enableEdgeToEdge() {
