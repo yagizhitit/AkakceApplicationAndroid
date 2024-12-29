@@ -10,8 +10,8 @@ import com.bumptech.glide.Glide
 import com.example.akakceapplicationandroid.R
 import com.example.akakceapplicationandroid.data.model.Product
 
-class ProductAdapter(private val products: List<Product>) :
-    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class CardProductAdapter(private val products: List<Product>) :
+    RecyclerView.Adapter<CardProductAdapter.ProductViewHolder>() {
 
     // ViewHolder sınıfı
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -7,15 +7,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.akakceapplicationandroid.data.repository.ProductRepository
-import com.example.akakceapplicationandroid.ui.adapter.ProductAdapter
-import kotlinx.coroutines.launch
+import com.example.akakceapplicationandroid.ui.adapter.CardProductAdapter
+import com.example.akakceapplicationandroid.ui.adapter.ListProductAdapter
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ProductAdapter
+    private lateinit var cardRecyclerView: RecyclerView
+    private lateinit var listRecyclerView: RecyclerView
+
+    private lateinit var cardAdapter: CardProductAdapter
+    private lateinit var listAdapter: ListProductAdapter
     private val repository = ProductRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +34,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         // RecyclerView setup
-        recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        adapter = ProductAdapter(emptyList()) // Boş bir listeyle adapter oluştur
-        recyclerView.adapter = adapter
+        cardRecyclerView = findViewById(R.id.card_recycler_view)
+        cardRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        cardAdapter = CardProductAdapter(emptyList()) // Boş bir listeyle adapter oluştur
+        cardRecyclerView.adapter = cardAdapter
+
+        listRecyclerView = findViewById(R.id.list_recycler_view)
+        listRecyclerView.layoutManager = GridLayoutManager(this, 2) // Her satırda 2 öğe
+        listAdapter = ListProductAdapter(emptyList())
+        listRecyclerView.adapter = listAdapter
+
 
         // Fetch products
         fetchProducts()
@@ -44,8 +53,11 @@ class MainActivity : AppCompatActivity() {
         repository.getProducts { products ->
             if (products != null) {
                 runOnUiThread {
-                    adapter = ProductAdapter(products) // Yeni ürünlerle adapter'ı güncelle
-                    recyclerView.adapter = adapter // RecyclerView'e bağla
+                    cardAdapter = CardProductAdapter(products) // Yeni ürünlerle adapter'ı güncelle
+                    cardRecyclerView.adapter = cardAdapter // RecyclerView'e bağla
+
+                    listAdapter = ListProductAdapter(products)
+                    listRecyclerView.adapter = listAdapter
                 }
             } else {
                 println("Ürünler yüklenemedi!")
