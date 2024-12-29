@@ -86,9 +86,8 @@ class MainActivity : AppCompatActivity() {
 
                     // Liste ürünlerine tıklama dinleyicisi
                     listAdapter.setOnItemClickListener { product ->
-                        val intent = Intent(this, DetailedProductActivity::class.java).apply {
-                            putExtra("PRODUCT", product)
-                        }
+                        val intent = Intent(this, DetailedProductActivity::class.java)
+                        intent.putExtra("PRODUCT_ID", product.id)
                         startActivity(intent)
                     }
                 }
@@ -105,9 +104,8 @@ class MainActivity : AppCompatActivity() {
 
                     // Yatay ürünlere tıklama dinleyicisi
                     cardAdapter.setOnItemClickListener { product ->
-                        val intent = Intent(this, DetailedProductActivity::class.java).apply {
-                            putExtra("PRODUCT", product)
-                        }
+                        val intent = Intent(this, DetailedProductActivity::class.java)
+                        intent.putExtra("PRODUCT_ID", product.id)
                         startActivity(intent)
                     }
 

@@ -11,4 +11,7 @@ interface ApiService {
     fun getProducts(
         @Query("limit") limit: Int? = null // Nullable ve varsayılan olarak null
     ): Call<List<Product>>
+
+    @GET("products/{id}")
+    fun getProductById(@Path("id") id: Int): Call<Product>
 }

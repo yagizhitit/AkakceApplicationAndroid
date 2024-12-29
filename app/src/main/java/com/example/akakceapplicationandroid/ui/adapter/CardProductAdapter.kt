@@ -50,9 +50,9 @@ class CardProductAdapter(private val products: List<Product>) :
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, DetailedProductActivity::class.java).apply {
-                putExtra("PRODUCT", product)
+                putExtra("PRODUCT_ID", product.id) // Sadece ürün ID'sini gönderiyoruz
             }
-            context.startActivity(intent) // Detay sayfasını başlat
+            context.startActivity(intent)
         }
     }
 

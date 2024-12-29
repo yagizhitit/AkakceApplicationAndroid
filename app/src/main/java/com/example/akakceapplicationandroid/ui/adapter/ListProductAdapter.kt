@@ -48,12 +48,12 @@ class ListProductAdapter(private val products: List<Product>) :
             .into(holder.productImage)
 
         // Ürün tıklama özelliği ekleme
-        holder.itemView.setOnClickListener { // Tıklama dinleyicisi
+        holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, DetailedProductActivity::class.java).apply {
-                putExtra("PRODUCT", product) // Tıklanan ürünü gönderiyoruz
+                putExtra("PRODUCT_ID", product.id) // Sadece ürün ID'sini gönderiyoruz
             }
-            context.startActivity(intent) // Detay sayfasını başlat
+            context.startActivity(intent)
         }
     }
 

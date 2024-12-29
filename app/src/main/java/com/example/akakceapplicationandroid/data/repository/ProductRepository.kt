@@ -47,4 +47,21 @@ class ProductRepository {
             }
         })
     }
+
+    fun getProductById(id: Int, callback: (Product?) -> Unit) {
+        val call = RetrofitInstance.api.getProductById(id)
+        call.enqueue(object : Callback<Product> {
+            override fun onResponse(call: Call<Product>, response: Response<Product>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<Product>, t: Throwable) {
+                callback(null)
+            }
+        })
+    }
 }
