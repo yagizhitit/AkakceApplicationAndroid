@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("products")
     fun getProducts(
-        @Query("limit") limit: Int? = null // Nullable ve varsayılan olarak null
+        @Query("limit") limit: Int? = null
     ): Call<List<Product>>
 
     @GET("products/{id}")

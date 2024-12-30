@@ -15,15 +15,15 @@ class ProductRepository {
                 response: Response<List<Product>>
             ) {
                 if (response.isSuccessful) {
-                    callback(response.body()) // Başarılı yanıtı döndür
+                    callback(response.body())
                 } else {
-                    callback(null) // Hata durumunda null döndür
+                    callback(null)
                 }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                 t.printStackTrace()
-                callback(null) // Hata durumunda null döndür
+                callback(null)
             }
         })
     }
@@ -35,15 +35,15 @@ class ProductRepository {
                 response: Response<List<Product>>
             ) {
                 if (response.isSuccessful) {
-                    callback(response.body()) // Başarılı yanıtı döndür
+                    callback(response.body())
                 } else {
-                    callback(null) // Hata durumunda null döndür
+                    callback(null)
                 }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                 t.printStackTrace()
-                callback(null) // Hata durumunda null döndür
+                callback(null)
             }
         })
     }

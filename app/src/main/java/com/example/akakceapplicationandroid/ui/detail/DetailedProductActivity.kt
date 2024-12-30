@@ -3,6 +3,7 @@ package com.example.akakceapplicationandroid.ui.detail
 
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,15 +30,13 @@ class DetailedProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailed_product)
 
-        // Toolbar'da geri butonu göstermek
+        // Toolbar Back Button
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-
-
-        // Görünüm öğelerini bağlama
+        // Connecting Display Values
         productCategory = findViewById(R.id.productCategory)
         productImage = findViewById(R.id.productImage)
         productTitle = findViewById(R.id.productTitle)
@@ -46,7 +45,7 @@ class DetailedProductActivity : AppCompatActivity() {
         productRatingCount = findViewById(R.id.productRatingCount)
         productDescription = findViewById(R.id.productDescription)
 
-        // Intent'ten ürün ID'sini al
+        // Getting Product ID with Intent
         val productId = intent.getIntExtra("PRODUCT_ID", -1)
         if (productId != -1) {
             fetchProductDetails(productId)
@@ -56,7 +55,7 @@ class DetailedProductActivity : AppCompatActivity() {
     }
 
     private fun fetchProductDetails(productId: Int) {
-        // API çağrısını başlat
+        // Starting API request
         val call = RetrofitInstance.api.getProductById(productId)
         call.enqueue(object : Callback<Product> {
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
@@ -76,18 +75,51 @@ class DetailedProductActivity : AppCompatActivity() {
 
     private fun displayProductDetails(product: Product?) {
         product?.let {
-            productCategory.text = it.category
+            productCategory.text = "${it.category} >"
             productTitle.text = it.title
             productPrice.text = String.format("%.2f TL", it.price)
-            productRating.text = "Rating: ${it.rating.rate}"
-            productRatingCount.text = "(${it.rating.count} reviews)"
+            productRating.text = "${it.rating.rate}"
+            productRatingCount.text = "${it.rating.count} değerlendirme"
             productDescription.text = it.description
 
-            // Glide ile ürün görselini yükleme
+            // Uploading Product Images with Glide
             Glide.with(this)
                 .load(it.image)
-                .placeholder(R.drawable.akakcelogo) // Yer tutucu görsel
+                .placeholder(R.drawable.akakcelogo)
                 .into(productImage)
+
+            updateStarRating(it.rating.rate)
+        }
+    }
+
+    private fun updateStarRating(rating: Double) {
+        val maxStars = 5
+        val fullStars = rating.toInt()
+        val partialStar = rating - fullStars // Filled Star Ratio
+        val starContainer = findViewById<LinearLayout>(R.id.starContainer)
+
+        starContainer.removeAllViews()
+
+        // Filled Stars
+        for (i in 1..fullStars) {
+            val star = ImageView(this)
+            star.setImageResource(R.drawable.filled_star)
+            starContainer.addView(star)
+        }
+
+        // Stars with Ratio
+        if (partialStar > 0) {
+            val star = ImageView(this)
+            star.setImageResource(R.drawable.filled_star)
+            star.alpha = partialStar.toFloat() // set the ratio
+            starContainer.addView(star)
+        }
+
+        // Empty Stars
+        for (i in fullStars + 2..maxStars) {
+            val star = ImageView(this)
+            star.setImageResource(R.drawable.empty_star)
+            starContainer.addView(star)
         }
     }
 

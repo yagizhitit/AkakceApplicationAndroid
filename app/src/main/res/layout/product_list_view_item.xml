@@ -27,8 +27,8 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Product Name"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:textSize="12sp"
+        android:textColor="@color/blue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_image" />
 
@@ -37,9 +37,10 @@
         android:id="@+id/product_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="199.99 TL"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/product_name" />
@@ -67,8 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="4.5"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <!-- Rating Count -->
@@ -76,9 +76,10 @@
         android:id="@+id/rating_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(320 reviews)"
+        android:text="320 kişi değerlendirdi"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
+        android:padding="5sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rating_layout" />
 

@@ -17,7 +17,6 @@ class ListProductAdapter(private val products: List<Product>) :
 
     private var onItemClickListener: ((Product) -> Unit)? = null
 
-    // ViewHolder sınıfı
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productImage: ImageView = itemView.findViewById(R.id.product_image)
         val productName: TextView = itemView.findViewById(R.id.product_name)
@@ -35,23 +34,23 @@ class ListProductAdapter(private val products: List<Product>) :
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = products[position]
 
-        // Verileri ViewHolder'a bağlama
+        // Connectin datas to viewholder
         holder.productName.text = product.title
         holder.productPrice.text = String.format("%.2f TL", product.price)
-        holder.productRating.text = product.rating.rate.toString()
-        holder.productRatingCount.text = "(${product.rating.count} reviews)"
+        holder.productRating.text = "${product.rating.rate.toString()}"
+        holder.productRatingCount.text = "${product.rating.count} kişi değerlendirdi"
 
-        // Glide kullanarak görsel yükleme
+        // Uploading image with glide
         Glide.with(holder.productImage.context)
             .load(product.image)
             .placeholder(R.drawable.akakcelogo)
             .into(holder.productImage)
 
-        // Ürün tıklama özelliği ekleme
+        // Clicking Feature
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, DetailedProductActivity::class.java).apply {
-                putExtra("PRODUCT_ID", product.id) // Sadece ürün ID'sini gönderiyoruz
+                putExtra("PRODUCT_ID", product.id)
             }
             context.startActivity(intent)
         }

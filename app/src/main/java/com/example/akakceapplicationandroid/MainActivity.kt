@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                     val activePosition = layoutManager.findFirstCompletelyVisibleItemPosition()
                     if (activePosition != RecyclerView.NO_POSITION) {
-                        updateDotIndicators(activePosition) // Dotları güncelle
+                        updateDotIndicators(activePosition) // Updating dots
                     }
                 }
             }
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     listAdapter = ListProductAdapter(products)
                     listRecyclerView.adapter = listAdapter
 
-                    // Liste ürünlerine tıklama dinleyicisi
+                    // ListProducts click listener
                     listAdapter.setOnItemClickListener { product ->
                         val intent = Intent(this, DetailedProductActivity::class.java)
                         intent.putExtra("PRODUCT_ID", product.id)
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
                     cardAdapter = CardProductAdapter(products)
                     cardRecyclerView.adapter = cardAdapter
 
-                    // Yatay ürünlere tıklama dinleyicisi
+                    // HorizontalProducts click listener
                     cardAdapter.setOnItemClickListener { product ->
                         val intent = Intent(this, DetailedProductActivity::class.java)
                         intent.putExtra("PRODUCT_ID", product.id)
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
             dotIndicator.addView(dots[i])
         }
 
-        // İlk noktayı aktif yap
+        // Activating first dot
         if (dots.isNotEmpty()) {
             updateDotIndicators(0)
         }

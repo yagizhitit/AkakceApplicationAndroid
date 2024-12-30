@@ -35,13 +35,13 @@ class CardProductAdapter(private val products: List<Product>) :
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = products[position]
 
-        // Verileri ViewHolder'a bağlama
+        // Connecting datas to viewholder
         holder.productName.text = product.title
         holder.productPrice.text = String.format("%.2f TL", product.price)
         holder.productRating.text = product.rating.rate.toString()
         holder.productRatingCount.text = "(${product.rating.count} reviews)"
 
-        // Glide kullanarak görsel yükleme
+        // Uploading image with Glide
         Glide.with(holder.productImage.context)
             .load(product.image)
             .placeholder(R.drawable.akakcelogo)
@@ -50,7 +50,7 @@ class CardProductAdapter(private val products: List<Product>) :
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, DetailedProductActivity::class.java).apply {
-                putExtra("PRODUCT_ID", product.id) // Sadece ürün ID'sini gönderiyoruz
+                putExtra("PRODUCT_ID", product.id)
             }
             context.startActivity(intent)
         }
@@ -58,7 +58,6 @@ class CardProductAdapter(private val products: List<Product>) :
 
     override fun getItemCount(): Int = products.size
 
-    // Tıklama dinleyicisi için bir metot ekle
     fun setOnItemClickListener(listener: (Product) -> Unit) {
         onItemClickListener = listener
     }
